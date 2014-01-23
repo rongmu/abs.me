@@ -2,6 +2,6 @@
 */pkg/
 */arc/
 
-*/.tar
-*/.tar.*
-*/.zip
+*/*.tar
+*/*.tar.*
+*/*.zip
