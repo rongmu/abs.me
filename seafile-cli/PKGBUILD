@@ -1,0 +1,47 @@
+# keep a close eye on seafile-shared:
+# https://aur.archlinux.org/packages/seafile-shared
+# Maintainer: Eric Yu <eric.rongmu@gmail.com>
+
+pkgname=seafile-cli
+pkgver=2.0.8
+pkgrel=1
+pkgdesc="seafile cli client"
+arch=('i686' 'x86_64' 'armv7h')
+url="https://github.com/haiwen/seafile/"
+license=('GPL')
+source=("https://github.com/haiwen/seafile/archive/v${pkgver}.tar.gz")
+md5sums=('f09802a1e5dab609156abc24c0577da8')
+depends=('ccnet>=1.3.7' 'libevent' 'python2-simplejson')
+makedepends=(sed)
+options=('!libtool' '!emptydirs')
+provides=(seafile-shared)
+conflicts=(seafile-shared)
+
+prepare() {
+  cd "$srcdir/seafile-$pkgver"
+
+  sed -ri '1s/python.?$/python2/' ./app/seaf-cli
+}
+
+build() {
+  cd "$srcdir/seafile-$pkgver"
+
+  ./autogen.sh
+  ./configure --disable-gui --prefix=/usr PYTHON=/usr/bin/python2
+  make -j1
+}
+
+package() {
+  cd "$srcdir/seafile-$pkgver"
+
+  make DESTDIR="$pkgdir/" install
+
+  install -D -m644 "$srcdir/seafile-$pkgver/LICENCE.txt" \
+                   "$pkgdir/usr/share/licenses/$pkgname/LICENCE.txt"
+
+  # remove unneeded desktop related files
+  cd "$pkgdir/usr/share"
+
+  rm -r applications icons pixmaps seafile \
+        man/man1/seafile-{applet,web}.1
+}

@@ -1,0 +1,25 @@
+# Maintainer: Eric Yu <eric.rongmu@gmail.com>
+
+pkgname=115upload
+_plugin_name=115upload.so
+pkgver=1.5.7.0
+pkgrel=1
+pkgdesc="115.com high speed uploading browser plugin"
+arch=('i686' 'x86_64')
+url="http://115.com"
+license=('unknown')
+source=(http://115.com/static/install/${pkgname}_v${pkgver}_x86.tar.gz)
+md5sums=('685fda7920c1df3d22ca7430949a8a77')
+
+if [[ $CARCH == 'x86_64' ]]; then
+  source=(http://115.com/static/install/${pkgname}_v${pkgver}_x64.tar.gz)
+  md5sums=('9a41b7c596353ed01393a987bc4f9dab')
+fi
+
+package() {
+  cd "$srcdir"
+  install -D -m755 "$_plugin_name" \
+                   "${pkgdir}/usr/lib/mozilla/plugins/$_plugin_name"
+}
+
+# vim:set ft=sh ts=2 sw=2 et:

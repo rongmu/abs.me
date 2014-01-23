@@ -1,0 +1,32 @@
+# check the version number: 
+# http://gnome-look.org/content/show.php/Moka?content=160164
+# Maintainer: Eric Yu <eric.rongmu@gmail.com>
+
+pkgname=moka-icon-theme
+_icon_theme_name=Moka
+pkgver=1.0
+pkgrel=2
+pkgdesc="Moka icons are designed to be a clear, simple and consistent icon set."
+arch=(any)
+url="http://www.snwh.org/moka-icon-theme"
+license=('GPL3')
+options=(!strip)
+source=(http://www.snwh.org/public/moka-icon-theme.zip)
+md5sums=('85d66d2c0f36b25a26395991fbe89ecf')
+
+prepare() {
+  # unzipped dirs' permissions are 700, files' are 600, this is problematic.
+  # chmod them first.
+  cd "$srcdir"
+  find "./$_icon_theme_name" -type d -exec chmod 755 {} +
+  find "./$_icon_theme_name" -type f -exec chmod 644 {} +
+}
+
+package() {
+  dest_dir="$pkgdir/usr/share/icons/"
+  mkdir -m 755 -p "$dest_dir"
+	cd "$srcdir"
+  cp -r "./$_icon_theme_name" "$dest_dir"
+}
+
+# vim:set ft=sh ts=2 sw=2 et:
