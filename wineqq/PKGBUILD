@@ -19,8 +19,7 @@ options=(!strip)
 
 PKGEXT=".pkg.tar"
 
-package()
-{
-	tar xzvf "$srcdir/data.tar.gz" -C "$pkgdir/"
+package() {
+  tar xzvf "$srcdir/data.tar.gz" -C "$pkgdir/"
   chown -R root:root "$pkgdir"
 }
