@@ -3,24 +3,27 @@
 # Maintainer: Eric Yu <eric.rongmu@gmail.com>
 
 pkgname=seafile-cli
-pkgver=2.0.8
+pkgver=2.1.1
 pkgrel=1
 pkgdesc="seafile cli client"
 arch=('i686' 'x86_64' 'armv7h')
 url="https://github.com/haiwen/seafile/"
 license=('GPL')
-source=("https://github.com/haiwen/seafile/archive/v${pkgver}.tar.gz")
-md5sums=('f09802a1e5dab609156abc24c0577da8')
-depends=('ccnet>=1.3.7' 'libevent' 'python2-simplejson')
+source=("https://github.com/haiwen/seafile/archive/v${pkgver}.tar.gz"
+        "0002-Add-autoconfiguration-for-libjansson.patch")
+depends=('ccnet>=1.4.0' 'libevent' 'python2-simplejson')
 makedepends=(sed)
-options=('!libtool' '!emptydirs')
 provides=(seafile-shared)
 conflicts=(seafile-shared)
+options=('!libtool' '!emptydirs')
+md5sums=('f205f7e4088341a1805a725305b4cd37'
+         '86357d9fee615ec3931cd2399fdcd4de')
 
 prepare() {
   cd "$srcdir/seafile-$pkgver"
 
   sed -ri '1s/python.?$/python2/' ./app/seaf-cli
+  patch -p1 -i "$srcdir/0002-Add-autoconfiguration-for-libjansson.patch"
 }
 
 build() {
@@ -42,6 +45,6 @@ package() {
   # remove unneeded desktop related files
   cd "$pkgdir/usr/share"
 
-  rm -r applications icons pixmaps seafile \
-        man/man1/seafile-{applet,web}.1
+  rm -r applications icons pixmaps \
+        man/man1/seafile-applet.1
 }
